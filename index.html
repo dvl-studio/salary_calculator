@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>請假扣薪試算工具</title>
+
+<style>
+body{
+    font-family: "Microsoft JhengHei", sans-serif;
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+h2{
+    text-align:center;
+}
+
+.card{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:20px;
+}
+
+input{
+    width:120px;
+    padding:8px;
+    margin:5px;
+}
+
+button{
+    padding:10px 20px;
+    background:#0078d4;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#005ea6;
+}
+
+.result{
+    margin-top:20px;
+    background:#f5f5f5;
+    padding:15px;
+    border-radius:10px;
+    line-height:1.8;
+}
+</style>
+</head>
+
+<body>
+
+<h2>請假扣薪試算工具</h2>
+
+<div class="card">
+
+<label>月薪：</label>
+<input type="number" id="salary" value="36300">
+元
+<br>
+
+<label>當月天數：</label>
+<input type="number" id="days" value="31">
+天
+<br>
+
+<label>事假時數：</label>
+<input type="number" id="personalLeave" value="1" step="0.5">
+小時
+<br>
+
+<label>病假時數：</label>
+<input type="number" id="sickLeave" value="1" step="0.5">
+小時
+<br><br>
+
+<button onclick="calculate()">計算</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<script>
+function calculate(){
+
+    const salary = Number(document.getElementById('salary').value);
+    const days = Number(document.getElementById('days').value);
+    const personalLeave = Number(document.getElementById('personalLeave').value);
+    const sickLeave = Number(document.getElementById('sickLeave').value);
+
+    const dailySalary = salary / days;
+    const hourlySalary = dailySalary / 8;
+
+    const personalDeduction = personalLeave * hourlySalary;
+    const sickDeduction = sickLeave * hourlySalary * 0.5;
+
+    const totalDeduction =
+        personalDeduction +
+        sickDeduction;
+
+    const finalSalary =
+        salary -
+        totalDeduction;
+
+    document.getElementById('result').innerHTML = `
+        <b>計算結果</b><br>
+        日薪：${dailySalary.toFixed(2)} 元<br>
+        時薪：${hourlySalary.toFixed(2)} 元<br>
+        <hr>
+        事假扣薪：${personalDeduction.toFixed(0)} 元<br>
+        病假扣薪：${sickDeduction.toFixed(0)} 元<br>
+        <hr>
+        總扣薪：${totalDeduction.toFixed(0)} 元<br>
+        <b>實領薪資：${finalSalary.toFixed(0)} 元</b>
+    `;
+}
+</script>
+
+</body>
+</html>
